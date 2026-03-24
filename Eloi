@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Eloi ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Quicksand:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cor-fundo: #fff5f7;
+            --cor-detalhe: #ff4d6d;
+            --cor-texto: #444;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: var(--cor-fundo);
+            font-family: 'Quicksand', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* TELA DE ABERTURA */
+        #tela-abertura {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--cor-fundo);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            transition: opacity 1s ease;
+        }
+
+        .envelope-fechado {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            cursor: pointer;
+            border: 3px dashed var(--cor-detalhe);
+            transition: transform 0.3s ease;
+        }
+
+        .envelope-fechado:hover {
+            transform: scale(1.05);
+        }
+
+        .envelope-fechado h2 {
+            font-family: 'Dancing Script', cursive;
+            color: var(--cor-detalhe);
+            margin: 0;
+        }
+
+        /* CONTEÚDO DA CARTA (ESCONDIDO NO INÍCIO) */
+        #conteudo-principal {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            animation: fadeIn 2s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .carta {
+            max-width: 600px;
+            width: 90%;
+            background: white;
+            padding: 50px 40px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.2);
+            border: 1px solid #ffccd5;
+            margin-top: 30px;
+            position: relative;
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            color: var(--cor-detalhe);
+            text-align: center;
+            font-size: 2.2rem;
+        }
+
+        .texto {
+            line-height: 1.8;
+            font-size: 1.1rem;
+            color: var(--cor-texto);
+            white-space: pre-line;
+            text-align: justify;
+        }
+
+        .video-container {
+            margin-top: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            display: none; /* Mantemos oculto e mostramos via JS */
+        }
+
+        /* Corações flutuantes */
+        .heart {
+            position: fixed;
+            color: var(--cor-detalhe);
+            pointer-events: none;
+            z-index: 99;
+            animation: moveUp 4s linear forwards;
+        }
+
+        @keyframes moveUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="tela-abertura" onclick="abrirCarta()">
+        <div class="envelope-fechado">
+            <h2>De: Kauã</h2>
+            <p>Para: Eloi</p>
+            <span style="font-size: 40px;">✉️</span>
+            <p style="color: #888; font-size: 12px;">(Clique para abrir)</p>
+        </div>
+    </div>
+
+    <div id="conteudo-principal">
+        <div class="carta">
+            <h1>Para você, com todo o meu amor...</h1>
+            
+            <div class="texto">
+                Todas as noites eu durmo pensando em você, todas as manhãs eu acordo pensando em você, todas as tardes eu estudo pensando em você, toda vez que eu escuto alguma música que envolva amor eu penso em você. 
+
+                Eu passo o dia esperando a sua próxima mensagem, eu fico feliz quando eu estou conversando com você, eu fico chateado quando eu não estou conversando com você, eu durmo feliz quando você me dá boa noite, eu acordo feliz quando você me dá bom dia.
+
+                Eu amo ouvir seus áudios, a sua voz me encanta, sabe, às vezes eu me imagino como seria se eu pudesse ir te ver, eu aposto que seria um dos melhores dias da minha vida. Tudo que eu sinto por você é tão verdadeiro, você é tão perfeito que eu não tenho palavras pra descrever o que eu sinto e o porquê de eu amar tanto você. 
+
+                É tudo tão intenso o que eu sinto por você, e pensar a forma como tudo isso começou... Talvez você me ache um chato que fica o dia todo te perturbando, mas tudo isso tem um motivo: você é minha paixão, eu sou completamente apaixonado por você. 
+
+                Desculpa se eu encher muito seu saco, mas eu não consigo passar tanto tempo sem te mandar mensagens. Eu te vejo e te imagino comigo em todos os lugares, como seria bom jogar videogame com você, como seria bom dormir no seu colo, como seria bom sair com você, como seria bom te beijar.
+
+                Eu te amo muito, demais. ❤️
+            </div>
+
+            <div id="player-musica"></div>
+        </div>
+    </div>
+
+    <script>
+        function abrirCarta() {
+            // Esconde a abertura
+            document.getElementById('tela-abertura').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('tela-abertura').style.display = 'none';
+                document.getElementById('conteudo-principal').style.display = 'flex';
+                
+                // Inicia os corações
+                for(let i=0; i<30; i++) {
+                    setTimeout(criarCoracao, i * 100);
+                }
+            }, 1000);
+
+            // Carrega o player do YouTube com autoplay
+            document.getElementById('player-musica').innerHTML = `
+                <iframe width="0" height="0" src="https://www.youtube.com/embed/nyuo9-OjNNg?autoplay=1" 
+                frameborder="0" allow="autoplay"></iframe>
+            `;
+        }
+
+        function criarCoracao() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.top = '100vh';
+            heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
+            document.body.appendChild(heart);
+
+            setTimeout(() => heart.remove(), 4000);
+        }
+    </script>
+</body>
+</html>
